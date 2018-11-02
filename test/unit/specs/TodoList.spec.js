@@ -1,16 +1,17 @@
-var { TodoListView } = require('@/views');
-var { TodoCollection } = require('@/models');
+import { mount } from '@vue/test-utils';
+import TodoList from '@/components/TodoList.vue';
+import Vue from 'vue';
+import snapshots from './__snapshots__/TodoList.spec.js.snap';
 
 describe('TodoListView render method', () => {
   it('should render an empty list when empty', () => {
-    var todoCollection = new TodoCollection();
-    var todoListView = new TodoListView({ collection: todoCollection });
-    todoListView.render();
-    var html = todoListView.$el[0].outerHTML;
-    expect(html).toMatchSnapshot();
+    const todos = [];
+    const wrapper = mount(TodoList, { propsData: { todos } });
+    const vue_html = wrapper.html();
+    expect(vue_html).sameHtmlAsSnapshot();
   });
   it('should render a list when not empty', () => {
-    var todoCollection = new TodoCollection([
+    const todos = [
       {
         completed: true,
         description: 'A completed task',
@@ -18,11 +19,10 @@ describe('TodoListView render method', () => {
       {
         completed: false,
         description: 'An incompete task',
-      }
-    ]);
-    var todoListView = new TodoListView({ collection: todoCollection });
-    todoListView.render();
-    var html = todoListView.$el[0].outerHTML;
-    expect(html).toMatchSnapshot();
+      },
+    ];
+    const wrapper = mount(TodoList, { propsData: { todos } });
+    const vue_html = wrapper.html();
+    expect(vue_html).sameHtmlAsSnapshot();
   });
 });
